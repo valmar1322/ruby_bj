@@ -13,7 +13,7 @@ class Deck
       end
     end
 
-    # @deck.shuffle!
+    @deck.shuffle!
   end
 
   def pull_card

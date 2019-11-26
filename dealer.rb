@@ -1,7 +1,7 @@
 class Dealer < Participant
   DEALER_NAME = 'Дилер'
 
-  def initialize(name, bank, *cards)
+  def initialize(bank, *cards)
     super(dealer_name, bank, cards)
   end
 

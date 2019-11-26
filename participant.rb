@@ -1,4 +1,6 @@
 class Participant
+  include Validator
+
   DEFAULT_BET = 10
   EMPTY_BANK = 'Not enough money to bet'
 
@@ -13,6 +15,10 @@ class Participant
 
   def pick_up_card(card)
     cards << card
+  end
+
+  def default_bet
+    DEFAULT_BET
   end
 
   def bet(bet = DEFAULT_BET)
