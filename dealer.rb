@@ -1,8 +1,8 @@
 class Dealer < Participant
   DEALER_NAME = 'Дилер'
 
-  def initialize(bank, *cards)
-    super(dealer_name, bank, cards)
+  def initialize(bank)
+    super(dealer_name, bank)
   end
 
   def dealer_name
@@ -10,6 +10,6 @@ class Dealer < Participant
   end
 
   def masked_cards
-    Array.new(cards.size, '*')
+    Array.new(cards.size, '*').join(' ')
   end
 end

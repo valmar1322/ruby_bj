@@ -2,29 +2,29 @@ class Participant
   include Validator
 
   DEFAULT_BET = 10
-  EMPTY_BANK = 'Not enough money to bet'
+  EMPTY_BANK = 'Не хватает денег не ставку'
 
   attr_accessor :name
   attr_reader :cards, :bank
 
-  def initialize(name, bank = 100, *cards)
+  def initialize(name, bank)
     @name = name
     @bank = bank
-    @cards = @cards
+    @cards = []
   end
 
   def pick_up_card(card)
-    cards << card
+    @cards << card
   end
 
-  def default_bet
+  def self.default_bet
     DEFAULT_BET
   end
 
-  def bet(bet = DEFAULT_BET)
-    raise EMPTY_BANK if bank - bet < 0
+  def bet
+    raise "У #{@name} " + EMPTY_BANK if @bank - self.class.default_bet < 0
     
-    bank -= bet
+    @bank -= self.class.default_bet
   end
 
   def total_points
@@ -33,12 +33,14 @@ class Participant
       points += 
         if card.dignity.is_a? Integer
           card.dignity
-        elsif card.dignity == 'A'
-          11
-        else
+        elsif card.picture?
           10
         end 
     end
     points
+  end
+
+  def hand
+    @cards.join(' ')
   end
 end

@@ -7,6 +7,10 @@ class Card
   end
 
   def to_s
-    "#{@card} #{@suit}"
+    "#{@card}#{@suit}"
+  end
+
+  def picture?
+  	@card == 'J' || @card == 'Q' || @card == 'K'
   end
 end
