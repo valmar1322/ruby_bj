@@ -1,16 +1,16 @@
 class Card
-  attr_reader :suit, :card
+  attr_reader :suit, :value
 
-  def initialize(suit, card)
+  def initialize(suit, value)
     @suit = suit
-    @card = card
+    @value = value
   end
 
   def to_s
-    "#{@card}#{@suit}"
+    "#{@value}#{@suit}"
   end
 
   def picture?
-  	@card == 'J' || @card == 'Q' || @card == 'K'
+  	@value == 'J' || @value == 'Q' || @value == 'K'
   end
 end

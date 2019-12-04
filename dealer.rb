@@ -9,7 +9,11 @@ class Dealer < Participant
     DEALER_NAME
   end
 
-  def masked_cards
-    Array.new(cards.size, '*').join(' ')
+  def hand(masked)
+    if masked
+      Array.new(cards.size, '*').join(' ')
+    else
+      super()
+    end
   end
 end

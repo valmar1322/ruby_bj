@@ -30,14 +30,34 @@ class Participant
   def total_points
     points = 0
     @cards.each do |card|
-      points += 
-        if card.dignity.is_a? Integer
-          card.dignity
+      if card.value != 'A'
+        if card.value.is_a? Integer
+          points += card.value
         elsif card.picture?
-          10
-        end 
+          points += 10
+        end
+      end
     end
+    
+    @cards.each do |card|
+      if card.value == 'A'
+        if points > 10
+          points += 1
+        else
+          points += 11
+        end
+      end
+    end
+
     points
+  end
+
+  def discard_cards
+    @cards = []
+  end
+
+  def take_money(gain)
+    @bank += gain
   end
 
   def hand

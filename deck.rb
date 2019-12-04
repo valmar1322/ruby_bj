@@ -6,14 +6,14 @@ class Deck
   end
 
   def seed!
-    cards = [(2..10).to_a, 'J', 'Q', 'K', 'A'].flatten    
+    values = [(2..10).to_a, 'J', 'Q', 'K', 'A'].flatten    
     suits = ['+', '<3', '^', '<>']
 
     @deck = []
 
     suits.each do |suit|
-      cards.each do |card|
-        @deck << Card.new(suit, card)
+      values.each do |value|
+        @deck << Card.new(suit, value)
       end
     end
 
