@@ -1,4 +1,7 @@
 class BlackJack
+
+  attr_reader :player_score, :dealer_score, :draw_score
+
   def initialize
     @deck = Deck.new
     @player_score = 0
@@ -6,28 +9,12 @@ class BlackJack
     @draw_score = 0
   end
 
-  def greetings
-    puts 'Игра BlackJack.'
-
-    bank = 100
-    # begin
-    #   puts 'Введите размер банка[50-200]$:'
-    #   bank = gets.to_i
-    # end while bank < 50 || bank > 200
-
-    create_player(bank)
-
-    @dealer = Dealer.new(bank)
+  def create_player(player_name, bank)
+    @player = Player.new(player_name, bank)
   end
 
-  def create_player(bank)
-    # puts "Введите своё имя латинскими буквами:"
-    # player_name = gets.chomp
-    player_name = 'Vladimir'
-    @player = Player.new(player_name, bank)
-  rescue RuntimeError => e
-    puts 'Имя должно быть длиной от 3 до 20 символов'
-    retry
+  def create_dealer(bank)
+    @dealer = Dealer.new()
   end
 
   def run
@@ -60,6 +47,8 @@ class BlackJack
   def first_deal
     @player.pick_up_card(@deck.pull_card)
     @player.pick_up_card(@deck.pull_card)
+    # @player.pick_up_card(Card.new('<>', 'A'))
+    # @player.pick_up_card(Card.new('<3', 'A'))
     @dealer.pick_up_card(@deck.pull_card)
     @dealer.pick_up_card(@deck.pull_card)
     @dealer.bet
