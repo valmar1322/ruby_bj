@@ -1,6 +1,6 @@
 class BlackJack
 
-  attr_reader :player_score, :dealer_score, :draw_score
+  attr_reader :player_score, :dealer_score, :draw_score, :dealer, :player
 
   def initialize
     @deck = Deck.new
@@ -17,61 +17,16 @@ class BlackJack
     @dealer = Dealer.new()
   end
 
-  def run
-    greetings
-    regame = false
-    loop do
-      first_deal
-      player_points
-      turn_info
-      choice = player_choice
-
-      if choice == 1
-        @player.pick_up_card(@deck.pull_card)
-        player_points
-        dealer_turn
-      elsif choice == 2 || choice == 3
-        dealer_turn
-      end
-
-      open_cards
-      
-      if restart?
-        restart
-      else
-        break
-      end
-    end
-  end
-
   def first_deal
     @player.pick_up_card(@deck.pull_card)
     @player.pick_up_card(@deck.pull_card)
-    # @player.pick_up_card(Card.new('<>', 'A'))
-    # @player.pick_up_card(Card.new('<3', 'A'))
     @dealer.pick_up_card(@deck.pull_card)
     @dealer.pick_up_card(@deck.pull_card)
     @dealer.bet
     @player.bet
-    puts "Вы с дилером сделали ставки по #{Participant.default_bet}$"
     
     participants_bank
     show_cards(true)
-  end
-
-  def restart?
-    regame = false
-    puts 'Еще раз? (y/n)'
-    until regame
-      regame = gets.chomp
-      case regame
-      when 'y', 'n' then regame
-      else
-        puts 'Неверный ввод'
-        false
-      end
-    end
-    regame == 'y'
   end
 
   def restart
@@ -81,47 +36,40 @@ class BlackJack
   end
 
   def show_cards(dealer_masked)
-    puts "Ваша рука: #{@player.hand}"
-    puts "Рука Дилера: #{@dealer.hand(dealer_masked)}"
+    puts "Ваша рука: #{}"
+    puts "Рука Дилера: #{}"
   end
 
-  def participants_bank
-    puts "Ваш Банк: #{@player.bank}$"
-    puts "Банк Дилера: #{@dealer.bank}$"
-    puts
+  def player_hand
+    @player.hand
   end
 
-  def turn_info
-    puts
-    puts "Ваш ход, можете: "
-    puts "1 - Добавить карту"
-    puts "2 - Открыть карты"
-    puts "3 - Пропустить"
+  def dealer_hand
+    @dealer.hand(true)
   end
 
-  def player_choice
-    choice = false
-    until choice
-      choice = gets.to_i
+  def dealer_open_hand
+    @dealer.hand(false)
+  end 
 
-      choice = 
-        case choice
-        when 1..3
-          choice
-        else
-          puts "Неверный ввод."
-          false
-        end
-    end
-    choice
+  def player_bank
+    @player.bank
+  end
+
+  def dealer_bank
+    @dealer.bank
   end
 
   def player_points
-    puts "У вас #{@player.total_points} очков"
+    @player.total_points
   end
 
   def dealer_points
-    puts "У дилера #{@dealer.total_points} очков"
+    @dealer.total_points
+  end
+
+  def player_add_card
+    @player.pick_up_card(@deck.pull_card)
   end
 
   def open_cards
