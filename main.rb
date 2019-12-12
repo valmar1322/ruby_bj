@@ -5,6 +5,7 @@ require_relative 'participant'
 require_relative 'player'
 require_relative 'dealer'
 require_relative 'black_jack'
-require_relative 'game'
+require_relative 'communicator'
 
-BlackJack.new.run
+communicator = Communicator.new
+BlackJack.new(communicator).run
