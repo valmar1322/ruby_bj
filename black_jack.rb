@@ -1,7 +1,4 @@
 class BlackJack
-
-  attr_reader :player_score, :dealer_score, :draw_score, :dealer, :player
-
   def initialize(communicator)
     @communicator = communicator
     @deck = Deck.new
@@ -10,51 +7,53 @@ class BlackJack
     @draw_score = 0
   end
 
-    def run
-      @communicator.greetings
-      regame = false
-      bank = 100
+  def run
+    @communicator.greetings
+    create_participants
 
-      begin
-        player_name = @communicator.input_player_name
-        create_player(player_name, bank)
-      rescue RuntimeError => e
-        @communicator.show_game_message(e.message)
-        retry
+    loop do
+      first_deal
+
+      @communicator.about_bets(Participant.default_bet)
+      @communicator.participants_bank(@player.bank, @dealer.bank)
+      @communicator.participants_hands(@player.hand, @dealer.hand(true))
+      @communicator.player_points(@player.total_points)
+      @communicator.turn_info
+
+      choice = @communicator.player_choice
+
+      if choice == 1
+        player_add_card
+        dealer_turn
+      elsif choice == 3
+        dealer_turn
       end
 
-      create_dealer(bank)
-
-      loop do
-        first_deal
-
-        @communicator.about_bets(Participant.default_bet)
-        @communicator.participants_bank(@player.bank, @dealer.bank)
-        @communicator.participants_hands(@player.hand, @dealer.hand(true))
-        @communicator.player_points(@player.total_points)
-        @communicator.turn_info
-
-        choice = @communicator.player_choice
-
-        if choice == 1
-          player_add_card
-          dealer_turn
-        elsif choice == 3
-          dealer_turn
-        end
-
-
-        @communicator.player_points(@player.total_points)
-        @communicator.dealer_points(@dealer.total_points)
-        @communicator.participants_hands(@player.hand, @dealer.hand(false))
-        @communicator.show_result(result)
-        
-        if restart?
-          restart
-        else
-          break
-        end
+      @communicator.player_points(@player.total_points)
+      @communicator.dealer_points(@dealer.total_points)
+      @communicator.participants_hands(@player.hand, @dealer.hand(false))
+      @communicator.show_result(result)
+      
+      if restart?
+        restart
+      else
+        break
       end
+    end
+  end
+
+  def create_participants
+    bank = 100
+
+    begin
+      player_name = @communicator.input_player_name
+      create_player(player_name, bank)
+    rescue RuntimeError => e
+      @communicator.show_game_message(e.message)
+      retry
+    end
+
+    create_dealer(bank)
   end
 
   def create_player(player_name, bank)
