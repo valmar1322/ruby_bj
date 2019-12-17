@@ -1,4 +1,11 @@
 class BlackJack
+
+  DEALER_WIN_MESSAGE = 'Вы обанкротились, охрана выведите его.'
+  PLAYER_WIN_MESSAGE = 'Вы выиграли все деньги у казино,
+                        но охрана скрутила вас и хорошенько отметелила. 
+                        После того как вы проснулись вы поняли, 
+                        что без гроша в кармане'
+
   def initialize(communicator)
     @communicator = communicator
     @deck = Deck.new
@@ -14,6 +21,7 @@ class BlackJack
     loop do
       first_deal
 
+
       @communicator.about_bets(Participant.default_bet)
       @communicator.participants_bank(@player.bank, @dealer.bank)
       @communicator.participants_hands(@player.hand, @dealer.hand(true))
@@ -28,6 +36,7 @@ class BlackJack
       elsif choice == 3
         dealer_turn
       end
+
 
       @communicator.player_points(@player.total_points)
       @communicator.dealer_points(@dealer.total_points)
@@ -64,13 +73,30 @@ class BlackJack
     @dealer = Dealer.new(bank)
   end
 
+  def player_win_message
+    PLAYER_WIN_MESSAGE
+  end
+
+  def dealer_win_message
+    DEALER_WIN_MESSAGE
+  end
+
   def first_deal
     @player.pick_up_card(@deck.pull_card)
     @player.pick_up_card(@deck.pull_card)
     @dealer.pick_up_card(@deck.pull_card)
     @dealer.pick_up_card(@deck.pull_card)
-    @dealer.bet
-    @player.bet
+    begin
+      @player.bet
+    rescue
+      @communicator.show_game_message(dealer_win_message)
+    end
+
+    begin
+      @dealer.bet
+    rescue
+      @communicator.show_game_message(player_win_message);
+    end
   end
 
   def restart
@@ -89,19 +115,19 @@ class BlackJack
 
     if player_points > 21
       dealer_win
-      -1
+      @dealer
     elsif dealer_points > 21
       player_win
-      1
+      @player
     elsif player_points < dealer_points
       dealer_win
-      -1
+      @dealer
     elsif player_points > dealer_points
       player_win
-      1
+      @player
     else
       draw
-      0
+      nil
     end
   end
 
@@ -136,8 +162,7 @@ class BlackJack
       case regame
       when 'y', 'n' then regame
       else
-        puts 'Неверный ввод'
-        false
+        @communicator.show_game_message('Неверный ввод')
       end
     end
     regame == 'y'

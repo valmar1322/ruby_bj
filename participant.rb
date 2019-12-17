@@ -30,17 +30,13 @@ class Participant
   def total_points
     points = 0
     @cards.each do |card|
-      if card.value != 'A'
-        if card.value.is_a? Integer
-          points += card.value
-        elsif card.picture?
-          points += 10
-        end
+      unless card.ace?
+        points += card.score
       end
     end
     
     @cards.each do |card|
-      if card.value == 'A'
+      if card.ace?
         if points > 10
           points += 1
         else

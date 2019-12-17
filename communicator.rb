@@ -17,40 +17,40 @@ class Communicator
   end
 
   def show_game_message(msg)
-  	puts msg
+    puts msg
   end
 
   def about_bets(bet)
-  	puts "Вы с дилером сделали ставки по #{bet}$"
+    puts "Вы с дилером сделали ставки по #{bet}$"
   end
 
   def participants_bank(player_bank, dealer_bank)
-  	puts "Ваш банк: #{player_bank}"
-  	puts "Банк дилера: #{dealer_bank}"
+    puts "Ваш банк: #{player_bank}"
+    puts "Банк дилера: #{dealer_bank}"
   end
 
   def player_points(player_points)
-  	puts "У вас #{player_points} очков"
+    puts "У вас #{player_points} очков"
   end
 
   def dealer_points(dealer_points)
-  	puts "У дилера #{dealer_points} очков"
+    puts "У дилера #{dealer_points} очков"
   end
 
   def participants_hands(player_hand, dealer_hand)
-  	puts "Ваша рука: #{player_hand}"
-  	puts "Рука дилера: #{dealer_hand}"
+    puts "Ваша рука: #{player_hand}"
+    puts "Рука дилера: #{dealer_hand}"
   end
 
-  def show_result(result)
-		msg =
-	  	case result
-			when 1 then "Вы выиграли!"
-			when -1 then "Дилер выиграл!"
-			when 0 then "Ничья"
-			end
-		puts msg
-	end
+  def show_result(winner)
+    msg =
+      case winner.class.to_s
+      when 'Player' then "Вы выиграли!"
+      when 'Dealer' then "Дилер выиграл!"
+      when 'NilClass' then "Ничья"
+      end
+    puts msg
+  end
 
   def player_choice
     choice = false
