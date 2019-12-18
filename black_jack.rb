@@ -21,7 +21,6 @@ class BlackJack
     loop do
       first_deal
 
-
       @communicator.about_bets(Participant.default_bet)
       @communicator.participants_bank(@player.bank, @dealer.bank)
       @communicator.participants_hands(@player.hand, @dealer.hand(true))
@@ -36,7 +35,6 @@ class BlackJack
       elsif choice == 3
         dealer_turn
       end
-
 
       @communicator.player_points(@player.total_points)
       @communicator.dealer_points(@dealer.total_points)
@@ -86,16 +84,19 @@ class BlackJack
     @player.pick_up_card(@deck.pull_card)
     @dealer.pick_up_card(@deck.pull_card)
     @dealer.pick_up_card(@deck.pull_card)
+
     begin
       @player.bet
     rescue
       @communicator.show_game_message(dealer_win_message)
+      abort "Игра окончена"
     end
 
     begin
       @dealer.bet
     rescue
-      @communicator.show_game_message(player_win_message);
+      @communicator.show_game_message(player_win_message)
+      abort "Игра окончена"
     end
   end
 
